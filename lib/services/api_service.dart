@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import '../models/pengaduan.dart';
 
 class ApiService {
-  final String baseUrl = 'http://localhost:3000/api'; 
+  final String baseUrl = 'http://localhost:3000/api';
 
   Future<void> register(String username, String email, String password) async {
     final response = await http.post(
@@ -59,4 +59,37 @@ class ApiService {
       throw Exception('Failed to load pengaduan');
     }
   }
+
+  Future<void> createPengaduan(
+      String token, String kategoriMasalah, String deskripsi) async {
+    final response = await http.post(
+      Uri.parse('${baseUrl}/pengaduan/pengaduan'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token,
+      },
+      body: jsonEncode({
+        'kategori_masalah': kategoriMasalah,
+        'deskripsi': deskripsi,
+      }),
+    );
+
+    if (response.statusCode != 201) {
+      throw Exception('Failed to create pengaduan: ${response.body}');
+    }
+  }
+  Future<void> deletePengaduan(String token, int id) async {
+    final response = await http.delete(
+      Uri.parse('${baseUrl}/pengaduan/pengaduan/$id'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token,
+      },
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to delete pengaduan');
+    }
+  }
 }
+
