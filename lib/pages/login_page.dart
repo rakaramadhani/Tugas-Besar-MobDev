@@ -3,6 +3,8 @@ import '../services/api_service.dart';
 import './pengaduan_page.dart'; // Pastikan import ini ada
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }

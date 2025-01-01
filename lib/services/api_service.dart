@@ -63,7 +63,7 @@ class ApiService {
   Future<void> createPengaduan(
       String token, String kategoriMasalah, String deskripsi) async {
     final response = await http.post(
-      Uri.parse('${baseUrl}/pengaduan/pengaduan'),
+      Uri.parse('$baseUrl/pengaduan/pengaduan'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': token,
@@ -80,7 +80,7 @@ class ApiService {
   }
   Future<void> deletePengaduan(String token, int id) async {
     final response = await http.delete(
-      Uri.parse('${baseUrl}/pengaduan/pengaduan/$id'),
+      Uri.parse('$baseUrl/pengaduan/pengaduan/$id'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': token,

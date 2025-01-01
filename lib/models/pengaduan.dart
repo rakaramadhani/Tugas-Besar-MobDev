@@ -8,14 +8,14 @@ class Pengaduan {
     required this.id,
     required this.kategoriMasalah,
     required this.deskripsi,
-    this.status_pengajuan = 'pending',
+    required this.status_pengajuan,
   });
 
   factory Pengaduan.fromJson(Map<String, dynamic> json) {
     return Pengaduan(
-      id: json['ID_Pengaduan'],
-      kategoriMasalah: json['kategori_masalah'],
-      deskripsi: json['deskripsi'],
+      id: json['ID_Pengaduan'] ?? 0,
+      kategoriMasalah: json['kategori_masalah'] ?? 'Tidak ada kategori',
+      deskripsi: json['deskripsi'] ?? 'Tidak ada deskripsi',
       status_pengajuan: json['status_pengajuan'] ?? 'pending',
     );
   }
