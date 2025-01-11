@@ -24,7 +24,8 @@ class _PengaduanPageState extends State<PengaduanPage> {
 
   Future<void> _loadPengaduan() async {
     try {
-      final List<Pengaduan> pengaduan = await apiService.getPengaduan(widget.token);
+      final List<Pengaduan> pengaduan =
+          await apiService.getPengaduan(widget.token);
       if (mounted) {
         setState(() {
           pengaduanList = pengaduan;
@@ -47,14 +48,26 @@ class _PengaduanPageState extends State<PengaduanPage> {
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Konfirmasi Hapus'),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        title: Text(
+          'Konfirmasi Hapus',
+          style: TextStyle(
+            color: Colors.red.shade700,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         content: Text('Apakah Anda yakin ingin menghapus pengaduan ini?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Batal'),
+            child: Text(
+              'Batal',
+              style: TextStyle(color: Colors.grey.shade600),
+            ),
           ),
-          TextButton(
+          ElevatedButton(
             onPressed: () async {
               Navigator.pop(context);
               setState(() {
@@ -64,17 +77,29 @@ class _PengaduanPageState extends State<PengaduanPage> {
                 await apiService.deletePengaduan(widget.token, pengaduan.id);
                 await _loadPengaduan();
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Pengaduan berhasil dihapus')),
+                  SnackBar(
+                    content: Text('Pengaduan berhasil dihapus'),
+                    backgroundColor: Colors.green,
+                  ),
                 );
               } catch (e) {
                 setState(() {
                   isLoading = false;
                 });
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Error: $e')),
+                  SnackBar(
+                    content: Text('Error: $e'),
+                    backgroundColor: Colors.red,
+                  ),
                 );
               }
             },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red.shade600,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
             child: Text('Hapus'),
           ),
         ],
@@ -84,7 +109,7 @@ class _PengaduanPageState extends State<PengaduanPage> {
 
   Future<void> _showCreatePengaduanDialog() async {
     final formKey = GlobalKey<FormState>();
-    String kategoriMasalah = 'Keamanan';
+    String kategoriMasalah = 'Kebersihan';
     String deskripsi = '';
 
     final List<String> kategoriOptions = [
@@ -97,7 +122,16 @@ class _PengaduanPageState extends State<PengaduanPage> {
     await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Buat Pengaduan Baru'),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        title: Text(
+          'Buat Pengaduan Baru',
+          style: TextStyle(
+            color: Colors.blue.shade700,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         content: Form(
           key: formKey,
           child: Column(
@@ -116,10 +150,25 @@ class _PengaduanPageState extends State<PengaduanPage> {
                     kategoriMasalah = newValue;
                   }
                 },
-                decoration: InputDecoration(labelText: 'Kategori Masalah'),
+                decoration: InputDecoration(
+                  labelText: 'Kategori Masalah',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  filled: true,
+                  fillColor: Colors.grey.shade100,
+                ),
               ),
+              SizedBox(height: 16),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Deskripsi'),
+                decoration: InputDecoration(
+                  labelText: 'Deskripsi',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  filled: true,
+                  fillColor: Colors.grey.shade100,
+                ),
                 maxLines: 3,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -135,9 +184,12 @@ class _PengaduanPageState extends State<PengaduanPage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Batal'),
+            child: Text(
+              'Batal',
+              style: TextStyle(color: Colors.grey.shade600),
+            ),
           ),
-          TextButton(
+          ElevatedButton(
             onPressed: () async {
               if (formKey.currentState?.validate() ?? false) {
                 formKey.currentState?.save();
@@ -153,18 +205,30 @@ class _PengaduanPageState extends State<PengaduanPage> {
                   );
                   await _loadPengaduan();
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Pengaduan berhasil dibuat')),
+                    SnackBar(
+                      content: Text('Pengaduan berhasil dibuat'),
+                      backgroundColor: Colors.green,
+                    ),
                   );
                 } catch (e) {
                   setState(() {
                     isLoading = false;
                   });
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Error: $e')),
+                    SnackBar(
+                      content: Text('Error: $e'),
+                      backgroundColor: Colors.red,
+                    ),
                   );
                 }
               }
             },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue.shade700,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
             child: Text('Simpan'),
           ),
         ],
@@ -176,35 +240,119 @@ class _PengaduanPageState extends State<PengaduanPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Daftar Pengaduan'),
+        title: Text(
+          'Daftar Pengaduan',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.blue.shade700,
+        elevation: 0,
       ),
-      body: isLoading
-          ? Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: pengaduanList.length,
-              itemBuilder: (context, index) {
-                final pengaduan = pengaduanList[index];
-                return Card(
-                  child: ListTile(
-                    title: Text(pengaduan.kategoriMasalah),
-                    subtitle: Text(pengaduan.deskripsi),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(pengaduan.status_pengajuan),
-                        IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () => _showDeleteConfirmation(pengaduan),
-                        ),
-                      ],
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.blue.shade700,
+              Colors.blue.shade500,
+            ],
+          ),
+        ),
+        child: isLoading
+            ? Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
+              )
+            : ListView.builder(
+                padding: EdgeInsets.all(16),
+                itemCount: pengaduanList.length,
+                itemBuilder: (context, index) {
+                  final pengaduan = pengaduanList[index];
+                  return Card(
+                    elevation: 4,
+                    margin: EdgeInsets.only(bottom: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                  ),
-                );
-              },
-            ),
-      floatingActionButton: FloatingActionButton(
+                    child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 6,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.blue.shade100,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Text(
+                                  pengaduan.kategoriMasalah,
+                                  style: TextStyle(
+                                    color: Colors.blue.shade700,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                icon: Icon(
+                                  Icons.delete,
+                                  color: Colors.red.shade400,
+                                ),
+                                onPressed: () =>
+                                    _showDeleteConfirmation(pengaduan),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 12),
+                          Text(
+                            pengaduan.deskripsi,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.black87,
+                            ),
+                          ),
+                          SizedBox(height: 12),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade200,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Text(
+                              pengaduan.status_pengajuan,
+                              style: TextStyle(
+                                color: Colors.grey.shade700,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: _showCreatePengaduanDialog,
-        child: Icon(Icons.add),
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.blue.shade700,
+        elevation: 4,
+        icon: Icon(Icons.add),
+        label: Text(
+          'Buat Pengaduan',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
     );
   }
